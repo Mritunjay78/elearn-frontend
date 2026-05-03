@@ -1,0 +1,38 @@
+name: CI/CD Pipeline
+
+# 1. Trigger: When should this run?
+on:
+  workflow_dispatch:
+
+jobs:
+  # 2. Build Job: Compile and test code
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Environment (e.g., Node.js)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+  # 3. Deploy Job: Send code to your server/cloud
+  deploy:
+    needs: build # Only runs if build succeeds
+    runs-on: ubuntu-latest
+    # Optional: Link to a GitHub environment for secrets/approvals
+    environment: production 
+    
+    steps:
+      - name: Deploy to Server
+        run: |
+          echo "Connecting to server..."
+          # Replace this with your actual deploy command (ssh, aws cli, etc.)
+          echo "Deploying application..."
